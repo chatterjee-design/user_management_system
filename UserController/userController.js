@@ -2,7 +2,6 @@ const UserModel = require("../UserModel/userSchema");
 const emailValidator = require("email-validator");
 const bcrypt = require("bcrypt");
 
-
 // Create a new User by registering user details
 const signUp = async (req, res) => {
   try {
@@ -11,6 +10,7 @@ const signUp = async (req, res) => {
 
     // every field is required
     if (!email || !password || !name || !bio || !username) {
+      console.log("Please enter");
       res.status(400).json({
         success: false,
         message: `Every field is required`,
@@ -20,8 +20,9 @@ const signUp = async (req, res) => {
     //validate email using npm package "email-validator"
     const validEmail = emailValidator.validate(email);
     if (!validEmail) {
+      console.log("valid email");
       //if email is not valid
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "Please provide a valid email address 📩",
       });
@@ -31,6 +32,7 @@ const signUp = async (req, res) => {
     const userExists = await UserModel.findOne({ email });
 
     if (userExists) {
+      console.log(`userexist ${userExists}`);
       //if user exists
       return res.status(400).json({
         success: false,
@@ -39,17 +41,20 @@ const signUp = async (req, res) => {
     }
 
     //create the user information by schema structure from request parameters
+    
+    console.log(req.body);
+  
+    
+    // Create new user
     const userInfo = await UserModel.create(req.body);
-
     // success message
     console.log(`successMessage`);
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "you have successfully registered",
-      userInfo,
     });
   } catch (err) {
-    console.log('errorMessage', err);user
+    console.log("errorMessage", err);
     // if email is not unique
     // if (err.code === 11000) {
 
@@ -63,7 +68,7 @@ const signUp = async (req, res) => {
     //   }
 
     //if there was any other error
-    res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: err.message,
     });
@@ -102,7 +107,6 @@ const signIn = async (req, res) => {
     // Create jwt token using userSchema method( jwtToken() )
     const token = user.jwtToken();
     user.password = undefined;
-  
 
     //set cookie's security and age
     const cookieOption = {
@@ -115,10 +119,8 @@ const signIn = async (req, res) => {
       success: true,
       data: user,
     });
-
-
   } catch (err) {
-    console.error("Sign In Error:", err); 
+    console.error("Sign In Error:", err);
     return res.status(400).json({
       success: false,
       message: err.message,
@@ -130,9 +132,9 @@ const signIn = async (req, res) => {
 const getUser = async (req, res) => {
   try {
     const userId = req.user.id;
-    
+
     const user = await UserModel.findById(userId);
-    console.log(userId)
+    console.log(userId);
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -156,26 +158,26 @@ const getUser = async (req, res) => {
 
 //logout user
 const logOut = async (req, res) => {
- try {
-  const cookieOption = {
-    expires: new Date(), // current expiry date
-    httpOnly: true //  not able to modify  the cookie in client side
-  };
+  try {
+    const cookieOption = {
+      expires: new Date(), // current expiry date
+      httpOnly: true, //  not able to modify  the cookie in client side
+    };
 
-  // return response with cookie without token
-  res.cookie("token", null, cookieOption);
+    // return response with cookie without token
+    res.cookie("token", null, cookieOption);
 
-  res.status(200).json({
-    success: true,
-    message: "logout successful",
-  });
- } catch (error) {
-  return res.status(500).json({
-    success: false,
-    message: "Internal server error",
-    error: error.message,
-  });
- }
-}
+    res.status(200).json({
+      success: true,
+      message: "logout successful",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
 
 module.exports = { signUp, signIn, getUser, logOut };
