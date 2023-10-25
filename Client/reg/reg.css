@@ -1,0 +1,47 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+main {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  grid-template-columns: 30% 40% 30%;
+  background-color: #f7fbfc;
+  width: 100vw;
+  height: 100vh;
+}
+.reg {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: #ffff;
+  padding: 2rem;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+}
+#response {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    gap: 15px;
+}
+.content{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    font-size: 1rem;
+}
+.content input{
+    height: 25px;
+}
+h2 {
+}
+
