@@ -117,7 +117,7 @@ const signIn = async (req, res) => {
     res.cookie("token", token, cookieOption);
     res.status(200).json({
       success: true,
-      data: user,
+      message: 'Login succesfully'
     });
   } catch (err) {
     console.error("Sign In Error:", err);

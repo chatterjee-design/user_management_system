@@ -11,9 +11,13 @@ router.get('/getUser', jwtAuth , getUser)
 router.get('/logout', jwtAuth, logOut)
 
 // Serve reg.html for the signup route
-router.get('/signup', (req, res) => {
+router.get('/signUp', (req, res) => {
     const regPath = path.join(__dirname, '../../Client/reg');
     res.sendFile(path.join(regPath, 'reg.html'));
+  });
+router.get('/signIn', (req, res) => {
+    const regPath = path.join(__dirname, '../../Client/login');
+    res.sendFile(path.join(regPath, 'login.html'));
   });
 
 module.exports = router
